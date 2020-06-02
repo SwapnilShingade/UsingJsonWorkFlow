@@ -1,0 +1,70 @@
+{
+  "Id": "ABCBanking",
+  "Version": 1,
+  "DataType": "WorkflowPOC.BankValidationResults, WorkflowPOC",
+  "Steps": [
+    {
+      "Id": "LoanApprovalWorkflow",
+      "StepType": "WorkflowPOC.Steps.ABCBank, WorkflowPOC",
+      "NextStepId": "CreditScoreValidation",
+      "Outputs": {
+        "IsBankSuccess": "step.IsBankSuccess"
+      }
+    },
+    {
+      "Id": "CreditScoreValidation",
+      "StepType": "WorkflowPOC.Steps.CreditScoreValidation, WorkflowPOC",
+      "NextStepId": "IfStep",
+      "Inputs": {
+        "IsCreditScoreValid": "data.IsBankSuccess"
+      },
+      "Outputs": {
+        "IsCreditScoreValid": "step.IsCreditScoreValid"
+      }
+    },
+    {
+      "Id": "IfStep",
+      "StepType": "WorkflowCore.Primitives.If, WorkflowCore",
+      "NextStepId": "LoanStatus",
+      "Inputs": { "Condition": "data.IsCreditScoreValid" },
+      "Do": [
+        [
+          {
+            "Id": "MyParallelStep",
+            "StepType": "WorkflowCore.Primitives.Sequence, WorkflowCore",
+            "Do": [
+
+              [
+                {
+                  "Id": "SalaryValidation",
+                  "StepType": "WorkflowPOC.Steps.SalaryValidation, WorkflowPOC"
+                }
+              ],
+              [
+                {
+                  "Id": "OutstandingLoanValidation",
+                  "StepType": "WorkflowPOC.Steps.OutstandingLoanValidation, WorkflowPOC"
+                }
+              ],
+              [
+                {
+                  "Id": "PersonalDetailsValidation",
+                  "StepType": "WorkflowPOC.Steps.PersonalDetailsValidation, WorkflowPOC"
+                }
+              ]
+            ]
+          }
+        ]
+      ]
+    },
+    {
+      "Id": "LoanStatus",
+      "Inputs": {
+        "IsLoanSanctioned": "data.IsCreditScoreValid"
+      },
+      "StepType": "WorkflowPOC.Steps.LoanStatus, WorkflowPOC"
+
+    }
+
+  ]
+}

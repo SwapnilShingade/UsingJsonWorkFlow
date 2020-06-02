@@ -1,0 +1,20 @@
+{
+  "Id": "HelloWorld",
+  "Version": 1,
+  "Steps": [
+    {
+      "Id": "Hello",
+      "StepType": "WorkflowPOC.HelloWorld, WorkflowPOC",
+      "NextStepId": "Intermediate"
+    },
+    {
+      "Id": "Intermediate",
+      "StepType": "WorkflowPOC.IntermediateFlow, WorkflowPOC",
+      "NextStepId": "Bye"
+    },
+    {
+      "Id": "Bye",
+      "StepType": "WorkflowPOC.GoodbyeWorld, WorkflowPOC"
+    }
+  ]
+}
